@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <title>Basic Sentiment Analysis</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Basic Sentiment Analysis</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>This page was developed by <a href="https://github.com/Binbasri-in">Mohammed Ali Binbasri :)</a></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!--
+                        create a form with a text area and a submit button
+                        This form will take the app name and its ID as in App Store
+                        and will send it to the server
+                    -->
+                    <form action="/" method="post">
+                        <div class="form-group">
+                            <label for="comment">Enter the app name and its ID:</label>
+                            <input type="text" class="form-control" name="app_name" placeholder="Enter the app name">
+                            <input type="text" class="form-control" name="app_id" placeholder="Enter the app ID">
+                        </div>
+                        <button style="margin-bottom: 10px;" type="submit" class="btn btn-primary mb-3">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <!--
+                add a photo to demo the id and name of the app
+            -->
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="static/demo.jpg" alt="app" style="width: 100%; height: 100%;">
+                </div>
+            </div>
+        </div>
+        <div id="loading" style="display: none;">
+            <img src="static/loading.gif" alt="loading" style="width: 100px; height: 100px; position: fixed; top: 50%; left: 50%; margin-top: -50px; margin-left: -50px;">
+        </div>
+    </body>
+    <script>
+        // a function to check if the user has entered a text in both input text boxes and enable the submit button
+        function checkInput() {
+            if (checkAppID() == false) {
+                document.getElementById("submit").disabled = true;
+                return false;
+            }
+            if (document.getElementById("text").value != "" && document.getElementById("text").value != "") {
+                document.getElementById("submit").disabled = false;
+            } else {
+                document.getElementById("submit").disabled = true;
+            }
+        }
+
+
+        // check if the entered app ID already in the storage
+        function checkAppID() {
+            var app_id = document.getElementById("app_id").value;
+            if (localStorage.getItem(app_id) != null) {
+                document.getElementById("app_id").value = "";
+                alert("This app ID already exists in database");
+            }
+        }
+
+        // function to show the loading icon while the server is processing the request
+        function showLoading() {
+            
+            // position it in the middle of the screen
+            document.getElementById("loading").style.marginTop = -document.getElementById("loading").offsetHeight / 2 + "px";
+            document.getElementById("loading").style.marginLeft = -document.getElementById("loading").offsetWidth / 2 + "px";
+            document.getElementById("loading").style.display = "block";
+        }
+
+        // add event listener to the input text boxes
+        document.getElementById("app_name").addEventListener("input", checkInput);
+        document.getElementById("app_id").addEventListener("input", checkInput);
+    
+        // add event listener to the submit button
+        document.getElementById("submit").addEventListener("click", showLoading);
+    </script>
+</html>

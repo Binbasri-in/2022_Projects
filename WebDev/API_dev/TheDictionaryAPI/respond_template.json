@@ -1,0 +1,23 @@
+{
+    "word": "hello",
+    "phonetics": [
+        {
+            "text": "/həˈləʊ/",
+            "audio": "https://lex-audio.useremarkable.com/mp3/hello_us_1_rr.mp3"
+        }
+    ],
+    "meanings": [{
+        "part of speech": "interjection",
+        "definitions": [{
+            "definition": "used as a greeting or to begin a telephone conversation.",
+            "example": "hello, is that Mr Smith?"
+        }]}, {
+        "part of speech": "noun",
+        "definitions": [{
+            "definition": "an utterance of ‘hello’; a greeting.",
+            "example": "she was getting polite nods and hellos from people she passed in the street"
+        }]}
+    ],
+    "status": 200,
+    "message": "Found"
+}
