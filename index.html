@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+/* From extension ms-toolsai.jupyter */
+/* These classnames are inherited from bootstrap, but are present in most notebook renderers */
+
+.alert {
+    width: auto;
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.alert > *:last-child {
+    margin-bottom: 0;
+}
+#preview > .alert:last-child {
+    /* Prevent this being set to zero by the default notebook stylesheet */
+    padding-bottom: 1em;
+}
+
+.alert-success {
+    /* Note there is no suitable color available, so we just copy "info" */
+    background-color: var(--theme-info-background);
+    color: var(--theme-info-foreground);
+}
+.alert-info {
+    background-color: var(--theme-info-background);
+    color: var(--theme-info-foreground);
+}
+.alert-warning {
+    background-color: var(--theme-warning-background);
+    color: var(--theme-warning-foreground);
+}
+.alert-danger {
+    background-color: var(--theme-error-background);
+    color: var(--theme-error-foreground);
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="analysing-credit-risk-on-european-peer-to-peer-lending-platform-bondora">Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora</h1>
+<p>The main purposes of this analysis are to summarize the characteristics of variables that can affect the loan status and to get some ideas about the relationships among variables.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Peer-to-peer (P2P) lending is a form of online micro-financing that has been growing as an alternative to traditional credit financing. P2P lending allows individuals to lend or borrow directly from each other without financial intermediaries, through an internet based platform</p>
+<h2 id="understanding-the-dataset">Understanding the Dataset</h2>
+<p>The Dataset is from Bondora, a P2P lending platform in Europe. The retrieved data is a pool of both defaulted and non-defaulted loans from the time period between 1st March 2009 and 27th January 2020. The data comprises of demographic and financial information of borrowers, and loan transactions. The total is 134, 000 loan application with 112 variables.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ActiveLateCategory</td>
+<td>When a loan is in Principal Debt then it will be categorized by Principal Debt days</td>
+</tr>
+<tr>
+<td>ActiveLateLastPaymentCategory</td>
+<td>Shows how many days has passed since last payment and categorised if it is overdue</td>
+</tr>
+<tr>
+<td>ActiveScheduleFirstPaymentReached</td>
+<td>Whether the first payment date has been reached according to the active schedule</td>
+</tr>
+<tr>
+<td>Age</td>
+<td>The age of the borrower when signing the loan application</td>
+</tr>
+<tr>
+<td>Amount</td>
+<td>Amount the borrower received on the Primary Market. This is the principal balance of your purchase from Secondary Market</td>
+</tr>
+<tr>
+<td>AmountOfPreviousLoansBeforeLoan</td>
+<td>Value of previous loans</td>
+</tr>
+<tr>
+<td>AppliedAmount</td>
+<td>The amount borrower applied for originally</td>
+</tr>
+<tr>
+<td>AuctionBidNumber</td>
+<td>Unique bid number which is accompanied by Auction number</td>
+</tr>
+<tr>
+<td>AuctionId</td>
+<td>A unique number given to all auctions</td>
+</tr>
+<tr>
+<td>AuctionName</td>
+<td>Name of the Auction, in newer loans it is defined by the purpose of the loan</td>
+</tr>
+<tr>
+<td>AuctionNumber</td>
+<td>Unique auction number which is accompanied by Bid number</td>
+</tr>
+<tr>
+<td>BidPrincipal</td>
+<td>On Primary Market BidPrincipal is the amount you made your bid on. On Secondary Market BidPrincipal is the purchase price</td>
+</tr>
+<tr>
+<td>BidsApi</td>
+<td>The amount of investment offers made via Api</td>
+</tr>
+<tr>
+<td>BidsManual</td>
+<td>The amount of investment offers made manually</td>
+</tr>
+<tr>
+<td>BidsPortfolioManager</td>
+<td>The amount of investment offers made by Portfolio Managers</td>
+</tr>
+<tr>
+<td>BoughtFromResale_Date</td>
+<td>The time when the investment was purchased from the Secondary Market</td>
+</tr>
+<tr>
+<td>City</td>
+<td>City of the borrower</td>
+</tr>
+<tr>
+<td>ContractEndDate</td>
+<td>The date when the loan contract ended</td>
+</tr>
+<tr>
+<td>Country</td>
+<td>Residency of the borrower</td>
+</tr>
+<tr>
+<td>County</td>
+<td>County of the borrower</td>
+</tr>
+<tr>
+<td>CreditScoreEeMini</td>
+<td>1000 No previous payments problems 900 Payments problems finished 24-36 months ago 800 Payments problems finished 12-24 months ago 700 Payments problems finished 6-12 months ago 600 Payment problems finished &lt; 6 months ago 500 Active payment problems</td>
+</tr>
+<tr>
+<td>CreditScoreEsEquifaxRisk</td>
+<td>Generic score for the loan applicants that do not have active past due operations in ASNEF; a measure of the probability of default one year ahead; the score is given on a 6-grade scale: AAA (“Very low”), AA (“Low”), A (“Average”), B (“Average High”), C (“High”), D (“Very High”).</td>
+</tr>
+<tr>
+<td>CreditScoreEsMicroL</td>
+<td>A score that is specifically designed for risk classifying subprime borrowers (defined by Equifax as borrowers that do not have access to bank loans); a measure of the probability of default one month ahead; the score is given on a 10-grade scale, from the best score to the worst: M1, M2, M3, M4, M5, M6, M7, M8, M9, M10.</td>
+</tr>
+<tr>
+<td>CreditScoreFiAsiakasTietoRiskGrade</td>
+<td>Credit Scoring model for Finnish Asiakastieto RL1 Very low risk 01-20 RL2 Low risk 21-40 RL3 Average risk 41-60 RL4 Big risk 61-80 RL5 Huge risk 81-100</td>
+</tr>
+<tr>
+<td>CurrentDebtDaysPrimary</td>
+<td>How long the loan has been in Principal Debt</td>
+</tr>
+<tr>
+<td>CurrentDebtDaysSecondary</td>
+<td>How long the loan has been in Interest Debt</td>
+</tr>
+<tr>
+<td>DateOfBirth</td>
+<td>The date of the borrower's birth</td>
+</tr>
+<tr>
+<td>DebtOccuredOn</td>
+<td>The date when Principal Debt occurred</td>
+</tr>
+<tr>
+<td>DebtOccuredOnForSecondary</td>
+<td>The date when Interest Debt occurred</td>
+</tr>
+<tr>
+<td>DebtToIncome</td>
+<td>Ratio of borrower's monthly gross income that goes toward paying loans</td>
+</tr>
+<tr>
+<td>DefaultDate</td>
+<td>The date when loan went into defaulted state and collection process was started</td>
+</tr>
+<tr>
+<td>DesiredDiscountRate</td>
+<td>Investment being sold at a discount or premium</td>
+</tr>
+<tr>
+<td>EAD1</td>
+<td>Exposure at default, outstanding principal at default</td>
+</tr>
+<tr>
+<td>EAD2</td>
+<td>Exposure at default, loan amount less all payments prior to default</td>
+</tr>
+<tr>
+<td>Education</td>
+<td>1 Primary education 2 Basic education 3 Vocational education 4 Secondary education 5 Higher education</td>
+</tr>
+<tr>
+<td>EL_V0</td>
+<td>Expected loss calculated by the specified version of Rating model</td>
+</tr>
+<tr>
+<td>EL_V1</td>
+<td>Expected loss calculated by the specified version of Rating model</td>
+</tr>
+<tr>
+<td>EL_V2</td>
+<td>Expected loss calculated by the specified version of Rating model</td>
+</tr>
+<tr>
+<td>EmploymentDurationCurrentEmployer</td>
+<td>Employment time with the current employer</td>
+</tr>
+<tr>
+<td>EmploymentPosition</td>
+<td>Employment position with the current employer</td>
+</tr>
+<tr>
+<td>EmploymentStatus</td>
+<td>1 Unemployed 2 Partially employed 3 Fully employed 4 Self-employed 5 Entrepreneur 6 Retiree</td>
+</tr>
+<tr>
+<td>ExistingLiabilities</td>
+<td>Borrower's number of existing liabilities</td>
+</tr>
+<tr>
+<td>ExpectedLoss</td>
+<td>Expected Loss calculated by the current Rating model</td>
+</tr>
+<tr>
+<td>ExpectedReturn</td>
+<td>Expected Return calculated by the current Rating model</td>
+</tr>
+<tr>
+<td>FirstPaymentDate</td>
+<td>First payment date according to initial loan schedule</td>
+</tr>
+<tr>
+<td>FreeCash</td>
+<td>Discretionary income after monthly liabilities</td>
+</tr>
+<tr>
+<td>Gender</td>
+<td>0 Male 1 Woman 2 Undefined</td>
+</tr>
+<tr>
+<td>GracePeriodEnd</td>
+<td>Date of the end of Grace period</td>
+</tr>
+<tr>
+<td>GracePeriodStart</td>
+<td>Date of the beginning of Grace period</td>
+</tr>
+<tr>
+<td>HomeOwnershipType</td>
+<td>0 Homeless 1 Owner 2 Living with parents 3 Tenant, pre-furnished property 4 Tenant, unfurnished property 5 Council house 6 Joint tenant 7 Joint ownership 8 Mortgage 9 Owner with encumbrance 10 Other</td>
+</tr>
+<tr>
+<td>IncomeFromChildSupport</td>
+<td>Borrower's income from alimony payments</td>
+</tr>
+<tr>
+<td>IncomeFromFamilyAllowance</td>
+<td>Borrower's income from child support</td>
+</tr>
+<tr>
+<td>IncomeFromLeavePay</td>
+<td>Borrower's income from paternity leave</td>
+</tr>
+<tr>
+<td>IncomeFromPension</td>
+<td>Borrower's income from pension</td>
+</tr>
+<tr>
+<td>IncomeFromPrincipalEmployer</td>
+<td>Borrower's income from its employer</td>
+</tr>
+<tr>
+<td>IncomeFromSocialWelfare</td>
+<td>Borrower's income from social support</td>
+</tr>
+<tr>
+<td>IncomeOther</td>
+<td>Borrower's income from other sources</td>
+</tr>
+<tr>
+<td>IncomeTotal</td>
+<td>Borrower's total income</td>
+</tr>
+<tr>
+<td>Interest</td>
+<td>Maximum interest rate accepted in the loan application</td>
+</tr>
+<tr>
+<td>InterestAndPenaltyBalance</td>
+<td>Unpaid interest and penalties</td>
+</tr>
+<tr>
+<td>InterestAndPenaltyDebtServicingCost</td>
+<td>Service cost related to the recovery of the debt based on the interest and penalties of the investment</td>
+</tr>
+<tr>
+<td>InterestAndPenaltyPaymentsMade</td>
+<td>Note owner received loan transfers earned interest, penalties total amount</td>
+</tr>
+<tr>
+<td>InterestAndPenaltyWriteOffs</td>
+<td>Interest that was written off on the investment</td>
+</tr>
+<tr>
+<td>InterestLateAmount</td>
+<td>Interest debt amount</td>
+</tr>
+<tr>
+<td>InterestRecovery</td>
+<td>Interest recovered due to collection process from in debt loans</td>
+</tr>
+<tr>
+<td>LanguageCode</td>
+<td>1 Estonian 2 English 3 Russian 4 Finnish 5 German 6 Spanish 9 Slovakian</td>
+</tr>
+<tr>
+<td>LastPaymentOn</td>
+<td>The date of the current last payment received from the borrower</td>
+</tr>
+<tr>
+<td>LiabilitiesTotal</td>
+<td>Total monthly liabilities</td>
+</tr>
+<tr>
+<td>ListedOnUTC</td>
+<td>Date when the loan application appeared on Primary Market</td>
+</tr>
+<tr>
+<td>LoanDate</td>
+<td>Date when the loan was issued</td>
+</tr>
+<tr>
+<td>LoanDuration</td>
+<td>Current loan duration in months</td>
+</tr>
+<tr>
+<td>LoanId</td>
+<td>A unique ID given to all loan applications</td>
+</tr>
+<tr>
+<td>LoanNumber</td>
+<td>A unique number given to all loan applications</td>
+</tr>
+<tr>
+<td>LoanStatusActiveFrom</td>
+<td>How long the current status has been active</td>
+</tr>
+<tr>
+<td>LossGivenDefault</td>
+<td>Gives the percentage of outstanding exposure at the time of default that an investor is likely to lose if a loan actually defaults. This means the proportion of funds lost for the investor after all expected recovery and accounting for the time value of the money recovered. In general, LGD parameter is intended to be estimated based on the historical recoveries. However, in new markets where limited experience does not allow us more precise loss given default estimates, a LGD of 90% is assumed.</td>
+</tr>
+<tr>
+<td>MaritalStatus</td>
+<td>1 Married 2 Cohabitant 3 Single 4 Divorced 5 Widow</td>
+</tr>
+<tr>
+<td>MaturityDate_Last</td>
+<td>Loan maturity date according to the current payment schedule</td>
+</tr>
+<tr>
+<td>MaturityDate_Original</td>
+<td>Loan maturity date according to the original loan schedule</td>
+</tr>
+<tr>
+<td>ModelVersion</td>
+<td>The version of the Rating model used for issuing the Bondora Rating</td>
+</tr>
+<tr>
+<td>MonthlyPayment</td>
+<td>Estimated amount the borrower has to pay every month</td>
+</tr>
+<tr>
+<td>MonthlyPaymentDay</td>
+<td>The day of the month the loan payments are scheduled for The actual date is adjusted for weekends and bank holidays (e.g. if 10th is Sunday then the payment will be made on the 11th in that month)</td>
+</tr>
+<tr>
+<td>NewCreditCustomer</td>
+<td>Did the customer have prior credit history in Bondora 0 Customer had at least 3 months of credit history in Bondora 1 No prior credit history in Bondora</td>
+</tr>
+<tr>
+<td>NextPaymentDate</td>
+<td>According to schedule the next date for borrower to make their payment</td>
+</tr>
+<tr>
+<td>NextPaymentNr</td>
+<td>According to schedule the number of the next payment</td>
+</tr>
+<tr>
+<td>NextPaymentSum</td>
+<td>According to schedule the amount of the next payment</td>
+</tr>
+<tr>
+<td>NoOfPreviousLoansBeforeLoan</td>
+<td>Number of previous loans</td>
+</tr>
+<tr>
+<td>note_id</td>
+<td>A unique ID given to the investments</td>
+</tr>
+<tr>
+<td>NoteLoanLateChargesPaid</td>
+<td>The amount of late charges the note has received</td>
+</tr>
+<tr>
+<td>NoteLoanTransfersInterestAmount</td>
+<td>The amount of interest the note has received</td>
+</tr>
+<tr>
+<td>NoteLoanTransfersMainAmount</td>
+<td>The amount of principal the note has received</td>
+</tr>
+<tr>
+<td>NrOfDependants</td>
+<td>Number of children or other dependants</td>
+</tr>
+<tr>
+<td>NrOfScheduledPayments</td>
+<td>According to schedule the count of scheduled payments</td>
+</tr>
+<tr>
+<td>OccupationArea</td>
+<td>1 Other 2 Mining 3 Processing 4 Energy 5 Utilities 6 Construction 7 Retail and wholesale 8 Transport and warehousing 9 Hospitality and catering 10 Info and telecom 11 Finance and insurance 12 Real-estate 13 Research 14 Administrative 15 Civil service &amp; military 16 Education 17 Healthcare and social help 18 Art and entertainment 19 Agriculture, forestry and fishing</td>
+</tr>
+<tr>
+<td>OnSaleSince</td>
+<td>Time when the investment was added to Secondary Market</td>
+</tr>
+<tr>
+<td>PenaltyLateAmount</td>
+<td>Late charges debt amount</td>
+</tr>
+<tr>
+<td>PlannedInterestPostDefault</td>
+<td>The amount of interest that was planned to be received after the default occurred</td>
+</tr>
+<tr>
+<td>PlannedInterestTillDate</td>
+<td>According to active schedule the amount of interest the investment should have received</td>
+</tr>
+<tr>
+<td>PlannedPrincipalPostDefault</td>
+<td>The amount of principal that was planned to be received after the default occurred</td>
+</tr>
+<tr>
+<td>PlannedPrincipalTillDate</td>
+<td>According to active schedule the amount of principal the investment should have received</td>
+</tr>
+<tr>
+<td>PreviousEarlyRepaymentsBeforeLoan</td>
+<td>How much was the early repayment amount before the loan</td>
+</tr>
+<tr>
+<td>PreviousEarlyRepaymentsCountBeforeLoan</td>
+<td>How many times the borrower had repaid early</td>
+</tr>
+<tr>
+<td>PreviousRepaymentsBeforeLoan</td>
+<td>How much the borrower had repaid before the loan</td>
+</tr>
+<tr>
+<td>PrincipalBalance</td>
+<td>Principal that still needs to be paid by the borrower</td>
+</tr>
+<tr>
+<td>PrincipalDebtServicingCost</td>
+<td>Service cost related to the recovery of the debt based on the principal of the investment</td>
+</tr>
+<tr>
+<td>PrincipalLateAmount</td>
+<td>Principal debt amount</td>
+</tr>
+<tr>
+<td>PrincipalOverdueBySchedule</td>
+<td>According to the current schedule, principal that is overdue</td>
+</tr>
+<tr>
+<td>PrincipalPaymentsMade</td>
+<td>Note owner received loan transfers principal amount</td>
+</tr>
+<tr>
+<td>PrincipalRecovery</td>
+<td>Principal recovered due to collection process from in debt loans</td>
+</tr>
+<tr>
+<td>PrincipalWriteOffs</td>
+<td>Principal that was written off on the investment</td>
+</tr>
+<tr>
+<td>ProbabilityOfDefault</td>
+<td>Probability of Default, refers to a loan’s probability of default within one year horizon.</td>
+</tr>
+<tr>
+<td>PurchasePrice</td>
+<td>Investment amount or secondary market purchase price</td>
+</tr>
+<tr>
+<td>Rating</td>
+<td>Bondora Rating issued by the Rating model</td>
+</tr>
+<tr>
+<td>Rating_V0</td>
+<td>Bondora Rating issued by version 0 of the Rating model</td>
+</tr>
+<tr>
+<td>Rating_V1</td>
+<td>Bondora Rating issued by version 1 of the Rating model</td>
+</tr>
+<tr>
+<td>Rating_V2</td>
+<td>Bondora Rating issued by version 2 of the Rating model</td>
+</tr>
+<tr>
+<td>RecoveryStage</td>
+<td>Current stage according to the recovery model 1 Collection 2 Recovery 3 Write Off</td>
+</tr>
+<tr>
+<td>RefinanceLiabilities</td>
+<td>The total amount of liabilities after refinancing</td>
+</tr>
+<tr>
+<td>ReScheduledOn</td>
+<td>The date when the a new schedule was assigned to the borrower</td>
+</tr>
+<tr>
+<td>Restructured</td>
+<td>The original maturity date of the loan has been increased by more than 60 days</td>
+</tr>
+<tr>
+<td>SoldInResale_Date</td>
+<td>The date when the investment was sold on Secondary market</td>
+</tr>
+<tr>
+<td>SoldInResale_Price</td>
+<td>The price of the investment that was sold on Secondary market</td>
+</tr>
+<tr>
+<td>SoldInResale_Principal</td>
+<td>The principal remaining of the investment that was sold on Secondary market</td>
+</tr>
+<tr>
+<td>StageActiveSince</td>
+<td>How long the current recovery stage has been active</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>The current status of the loan application</td>
+</tr>
+<tr>
+<td>UseOfLoan</td>
+<td>0 Loan consolidation 1 Real estate 2 Home improvement 3 Business 4 Education 5 Travel 6 Vehicle 7 Other 8 Health 101 Working capital financing 102 Purchase of machinery equipment 103 Renovation of real estate 104 Accounts receivable financing 105 Acquisition of means of transport 106 Construction finance 107 Acquisition of stocks 108 Acquisition of real estate 109 Guaranteeing obligation 110 Other business All codes in format 1XX are for business loans that are not supported since October 2012</td>
+</tr>
+<tr>
+<td>UserName</td>
+<td>The user name generated by the system for the borrower</td>
+</tr>
+<tr>
+<td>VerificationType</td>
+<td>Method used for loan application data verification 0 Not set 1 Income unverified 2 Income unverified, cross-referenced by phone 3 Income verified 4 Income and expenses verified</td>
+</tr>
+<tr>
+<td>WorkExperience</td>
+<td>Borrower's overall work experience in years</td>
+</tr>
+<tr>
+<td>WorseLateCategory</td>
+<td>Displays the last longest period of days when the loan was in Principal Debt</td>
+</tr>
+<tr>
+<td>XIRR</td>
+<td>XIRR (extended internal rate of return) is a methodology to calculate the net return using the loan issued date and amount, loan repayment dates and amounts and the principal balance according to the original repayment date. All overdue principal payments are written off immediately. No provisions for future losses are made &amp; only received (not accrued or scheduled) interest payments are taken into account.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="data-pre-processing">Data Pre-processing</h2>
+<p>The data is pre-processed by removing the variables that are not relevant to the analysis, and by dealing with missing values. for the missing values, the variables with more than 40% missing values are removed, and the rest are imputed by the mean or mode value of the variable.</p>
+<p><img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\missing_values.png" alt="Missing Values"></p>
+<p>Then for categorical variables, we removed the irrelevant values that could happen during the data collection process, and then try to prepare the data to be used in the analysis with higher integrity and correctness.</p>
+<p>In addition, the Default Status variable was defined in this process where we created a column for the default status of each loan application. The default status is defined as 1 if the loan is defaulted, and 0 if the loan is not defaulted.</p>
+<p>The shape of the dataset after pre-processing is <strong>(77394, 42)</strong> including the target variable which is Default Status.</p>
+<h2 id="exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</h2>
+<p>The EDA is done to understand the data and to get some ideas about the relationships among variables. The EDA is done by using the univariate and bivariate analysis. The univariate analysis is done by using the descriptive statistics and the visualization. The bivariate analysis is done by using the visualization.</p>
+<p>We found many correlation between the variables and tried to identify and visualize the relationships among variables. The relationships are visualized by using the scatter plot, box plot, and bar plot.</p>
+<p>All the insights and findings from the EDA can be found in the file the EDA NoteBook.</p>
+<p>These are some of the insights and findings from the EDA:</p>
+<ul>
+<li>The Gender Distribution in the dataset is <strong>66% Male</strong> and <strong>34% Female</strong>.</li>
+<li>The Age Distribution in the dataset is <strong>68% between 25 and 44 years old</strong>.</li>
+<li>check the following plots for more insights about the Age and Gender Distribution in the dataset.</li>
+</ul>
+<p><img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Gender_Default_count.png" alt="Gender_Default">
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Age_Default.png" alt="Age_Default"></p>
+<h2 id="feature-engineering-and-selection">Feature Engineering and Selection</h2>
+<p>The feature engineering and selection is done to prepare the data for the machine learning model. The feature engineering is done by removing the outliers in the dataset and by applying the method of Mutual Information to select the most relevant features. Then according to the results of EDA we tested some new variables that could be useful for the analysis. and finally we applied the method of Principal Component Analysis (PCA) to reduce the dimensionality of the data.</p>
+<p>The feature engineering and selection is done by using the following methods:</p>
+<ul>
+<li>Mutual Information (MI) and the result is as follows:</li>
+</ul>
+<p>For Category Variables:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\MI_cat.png" alt="MI"></p>
+<p>For Numeric Variables:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\MI_num.png" alt="MI"></p>
+<ul>
+<li>Principal Component Analysis (PCA) and the explained variance is as follows:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\PCA.png" alt="PCA"></li>
+</ul>
+<h2 id="machine-learning-model">Machine Learning Model</h2>
+<h3 id="classification-model">Classification Model</h3>
+<p>The first target variable is the Default Status, which is a binary variable. The classification model is used to predict the Default Status of the loan application. The classification model is done by using the Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting Classifier. All models were evaluated by using the accuracy, precision, recall, F1 score and confusion matrix. Then we selected the best model with the highest accuracy and applied the model to the test data.</p>
+<p>The selected model was: <strong>Logistic Regression</strong> with the accuracy of <strong>88.57 %</strong></p>
+<h3 id="regression-model">Regression Model</h3>
+<p>As part of the credit risk analysis, predicting the default state of the loan is just one part of the analysis. There are other factors that the credit risk depends on. In our analysis, we created the target variables that has an impact on the credit score. These Targets are:</p>
+<ul>
+<li>Equated Monthly Instalment (EMI)</li>
+<li>Eligible Loan Amount (ELA)</li>
+<li>Preferred Rate of Interest (PROI)</li>
+</ul>
+<p>Then we create a model to predict these targets using Regression Model. The regression model is done by using the Linear Regression, Ridge Regression, Random Forest Regressor, and Gradient Boosting Regressor. All models were evaluated by using the R2 score, Mean Absolute Error (MAE), Mean Squared Error (MSE), and Root Mean Squared Error (RMSE). Then we selected the best model with the highest R2 score and applied the model to the test data.</p>
+<p>The selected model was: <strong>Ridge Regression</strong> with the R2 score of <strong>89.07 %</strong></p>
+<h2 id="pipeline">Pipeline</h2>
+<p>The pipeline is done by using the Pipeline from sklearn. The pipeline is done by using the Standard Scaler, PCA, and the selected model. The pipeline is done for both classification and regression model.</p>
+<p>The pipeline for the classification model is as follows:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\classification.jpg" alt="Model"></p>
+<p>The pipeline for the regression model is as follows:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\regression.jpg" alt="Model"></p>
+<p>These pipelines are used to predict the Default Status, EMI, ELA, and PROI. They were deployed in the web application using the Flask framework with pickle to save the model.</p>
+<h2 id="deployment">Deployment</h2>
+<p>The deployment is done by using the Flask framework. The web application is deployed in the Heroku platform. The web application is done by using the HTML, CSS, and JavaScript. The web application is done by using the Bootstrap framework. The web application is done by using the Flask framework with pickle to save the model.</p>
+<p>There are two pages in the web application:</p>
+<ul>
+<li>One page to let the user enter the required data to predict the Default Status, EMI, ELA, and PROI.</li>
+<li>The other page to show the result of the prediction.</li>
+</ul>
+<p>Here is the link to the web application: <a href="https://credit-risk-analysis.herokuapp.com/">https://credit-risk-analysis.herokuapp.com/</a>
+Here is a screenshot of the web application:
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Web_app1.jpg" alt="Web">
+<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\web_app2.jpg" alt="Web"></p>
+<h2 id="result-and-conclusion">Result and Conclusion</h2>
+<p>The final result is a web application that predicts the parameters required to calculate the credit score of a given loan application and investors can use this web application to predict the credit score of a loan application before investing in it, this will help investors to make a better decision and to reduce the risk of investing in a loan application that will be defaulted.</p>
+<h2 id="credit">Credit</h2>
+<p>This project was done as a part of Data Analytics and Machine Learning Internship at <a href="https://github.com/Technocolabs100">Technocolabs</a>.</p>
+<p>This project is done by:</p>
+<ul>
+<li><a href="https://github.com/roostamovic">Doston Kholdarov</a> <strong>Mentor</strong></li>
+<li><a href="https://github.com/Binbasri-in">Mohammed Ali Alsakkaf</a> <strong>Team Leader</strong></li>
+<li><a href="https://github.com/AhmedSaeed0qfq">Ahmed Saeed</a></li>
+<li><a href="https://github.com/NaveenKumarGadde">Naveen Kumar</a></li>
+<li><a href="https://github.com/Rasco101">Mohammed Sayed</a></li>
+</ul>
+
+        
+        
+    </body>
+    </html>
