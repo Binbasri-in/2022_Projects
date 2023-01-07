@@ -210,6 +210,8 @@ The pipeline for the regression model is as follows:
 These pipelines are used to predict the Default Status, EMI, ELA, and PROI. They were deployed in the web application using the Flask framework with pickle to save the model.
 
 ## Deployment
+[![Netlify Status](https://api.netlify.com/api/v1/badges/94954279-624a-451e-830f-7eb45cc0eb21/deploy-status)](https://app.netlify.com/sites/magnificent-kheer-e9717e/deploys)
+
 The deployment is done by using the Flask framework. The web application is deployed in the Heroku platform. The web application is done by using the HTML, CSS, and JavaScript. The web application is done by using the Bootstrap framework. The web application is done by using the Flask framework with pickle to save the model.
 
 There are two pages in the web application:
