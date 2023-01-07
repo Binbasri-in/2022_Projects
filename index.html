@@ -613,7 +613,7 @@
 </table>
 <h2 id="data-pre-processing">Data Pre-processing</h2>
 <p>The data is pre-processed by removing the variables that are not relevant to the analysis, and by dealing with missing values. for the missing values, the variables with more than 40% missing values are removed, and the rest are imputed by the mean or mode value of the variable.</p>
-<p><img src="images/missing_values.webp" alt="Missing Values"></p>
+<p><br><img src="images/missing_values.webp" alt="Missing Values"><br></p>
 <p>Then for categorical variables, we removed the irrelevant values that could happen during the data collection process, and then try to prepare the data to be used in the analysis with higher integrity and correctness.</p>
 <p>In addition, the Default Status variable was defined in this process where we created a column for the default status of each loan application. The default status is defined as 1 if the loan is defaulted, and 0 if the loan is not defaulted.</p>
 <p>The shape of the dataset after pre-processing is <strong>(77394, 42)</strong> including the target variable which is Default Status.</p>
