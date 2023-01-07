@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <!-- http://getbootstrap.com/docs/4.5/ -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+        <!-- http://getbootstrap.com/docs/4.5/ -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+        <title>Bondora</title>
+
+    </head>
+
+    <body>
+        <!--
+            a form that takes the required information from the user which are:
+            #    the features required for the model 
+            #    'BidsPortfolioManager', 'BidsApi', 'BidsManual', 'NewCreditCustomer',
+            #    'VerificationType', 'LanguageCode', 'Age', 'Gender', 'Country',
+            #    'AppliedAmount', 'Interest', 'MonthlyPayment',
+            #    'UseOfLoan', 'Education', 'MaritalStatus', 'EmploymentStatus',
+            #    'EmploymentDurationCurrentEmployer', 'OccupationArea',
+            #    'HomeOwnershipType', 'IncomeTotal', 'ExistingLiabilities',
+            #    'RefinanceLiabilities', 'DebtToIncome', 'FreeCash',
+            #    'Rating', 'Restructured', 'CreditScoreEsMicroL',
+            #    'PrincipalPaymentsMade', 'InterestAndPenaltyPaymentsMade',
+            #    'InterestAndPenaltyBalance',
+            #    'Previous Early Repayments Before Loan'
+        -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Analysing Credit Risk on European Peer-to-Peer lending platform Bondora</h1>
+                    <p>By <a href="#">Mohammed Ali</a></p>
+                    <p>For more information, please visit <a href="#">this</a> page.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="/predict" method="POST">
+                        <div class="form-group">
+                            <d class="form-group">
+                                <div class="col-md-6">
+                                    <label for="BidsPortfolioManager">BidsPortfolioManager</label>
+                                    <input type="text" class="form-control" id="BidsPortfolioManager" name="BidsPortfolioManager" placeholder="BidsPortfolioManager">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="BidsApi">BidsApi</label>
+                                    <input type="text" class="form-control" id="BidsApi" name="BidsApi" placeholder="BidsApi">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="BidsManual">BidsManual</label>
+                                    <input type="text" class="form-control" id="BidsManual" name="BidsManual" placeholder="BidsManual">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="NewCreditCustomer">NewCreditCustomer</label>
+                                    <!--choose 0 Customer had at least 3 months of credit history in Bondora 1 No prior credit history in -->
+                                    <select class="form-control" id="NewCreditCustomer" name="NewCreditCustomer">
+                                        <option value="Existing_credit_customer">Existing_credit_customer</option>
+                                        <option value="New_credit_Customer">New_credit_Customer</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="VerificationType">VerificationType</label>
+                                    <!--choose 0 Not set 1 Income unverified 2 Income unverified, cross-referenced by phone 3 Income verified 4 Income and expenses -->
+                                    <select class="form-control" id="VerificationType" name="VerificationType">
+                                        <option value="NotSet">NotSet</option>
+                                        <option value="IncomeUnverified">Income unverified</option>
+                                        <option value="Income unverified, cross-referenced by phone">Income unverified, cross-referenced by phone</option>
+                                        <option value="Income verified">Income verified</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="LanguageCode">LanguageCode</label>
+                                    <!--choose 1 Estonian 2 English 3 Russian 4 Finnish 5 German 6 Spanish 9 Slovakian -->
+                                    <select class="form-control" id="LanguageCode" name="LanguageCode">
+                                        <option value="Estonian">Estonian</option>
+                                        <option value="Finnish">Finnish</option>
+                                        <option value="Spanish">Spanish</option>
+                                        <option value="Russian">Russian</option>
+                                        <option value="English">English</option>
+                                        <option value="Slovakian">Slovakian</option>
+                                        <option value="German">German</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            <div class="col-md-6">
+                                <label for="Age">Age</label>
+                                <input type="text" class="form-control" id="Age" name="Age" placeholder="Age">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Gender">Gender</label>
+                                <!--choose 0 Male 1 Woman 2 Undefined-->
+                                <select class="form-control" id="Gender" name="Gender">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Undefined">Undefined</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Country">Country</label>
+                                <select class="form-control" id="Country" name="Country">
+                                    <option value="Estonia">Estonia</option>
+                                    <option value="Finland">Finland</option>
+                                    <option value="Spain">Spain</option>
+                                    <option value="Slovakia">Slovakia</option>
+                                </select>                            
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="AppliedAmount">AppliedAmount</label>
+                                <input type="text" class="form-control" id="AppliedAmount" name="AppliedAmount" placeholder="AppliedAmount">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Interest">Interest</label>
+                                <input type="text" class="form-control" id="Interest" name="Interest" placeholder="Interest">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MonthlyPayment">MonthlyPayment</label>
+                                <input type="text" class="form-control" id="MonthlyPayment" name="MonthlyPayment" placeholder="MonthlyPayment">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="UseOfLoan">UseOfLoan</label>
+                                <select class="form-control" id="UseOfLoan" name="UseOfLoan">
+                                    <option value="Home improvement">Home improvement</option>
+                                    <option value="Loan consolidation">Loan consolidation</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Not set">Not set</option>
+                                    <option value="Vehicle">Vehicle</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Real estate">Real estate</option>
+                                    <option value="Purchase of machinery equipment">Purchase of machinery equipment</option>
+                                    <option value="Other business">Other business</option>
+                                    <option value="Accounts receivable financing">Accounts receivable financing</option>
+                                    <option value="Working capital financing">Working capital financing</option>
+                                    <option value="Acquisition of stocks">Acquisition of stocks</option>
+                                    <option value="Acquisition of real estate">Acquisition of real estate</option>
+                                    <option value="Construction finance">Construction finance</option>
+                                </select>      
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Education">Education</label>
+                                <select class="form-control" id="Education" name="Education">
+                                    <option value="Secondary education">Secondary education</option>
+                                    <option value="Higher education">Higher education</option>
+                                    <option value="Vocational education">Vocational education</option>
+                                    <option value="Basic education">Basic education</option>
+                                    <option value="Not_present">Not_present</option>
+                                    <option value="Primary education">Primary education</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MaritalStatus">MaritalStatus</label>
+                                <select class="form-control" id="MaritalStatus" name="MaritalStatus">
+                                    <option value="Single">Single</option>
+                                    <option value="Married">Married</option>
+                                    <option value="Cohabitant">Cohabitant</option>
+                                    <option value="Divorced">Divorced</option>
+                                    <option value="Widow">Widow</option>
+                                    <option value="Not_specified">Not_specified</option>
+                                </select>                            
+                            </div>
+                            <div class="col-md-6">
+                                <label for="EmploymentStatus">EmploymentStatus</label>
+                                <select class="form-control" id="EmploymentStatus" name="EmploymentStatus">
+                                    <option value="Fully employed">Fully employed</option>
+                                    <option value="Entrepreneur">Entrepreneur</option>
+                                    <option value="Self-employed">Self-employed</option>
+                                    <option value="Partially employed">Partially employed</option>
+                                    <option value="Not_specified">Not_specified</option>
+                                </select>                             
+                            </div>
+                            <div class="col-md-6">
+                                <label for="EmploymentDurationCurrentEmployer">EmploymentDurationCurrentEmployer</label>
+                                <select class="form-control" id="EmploymentDurationCurrentEmployer" name="EmploymentDurationCurrentEmployer">
+                                    <option value="MoreThan5Years">MoreThan5Years</option>
+                                    <option value="UpTo1Year">UpTo1Year</option>
+                                    <option value="UpTo5Years">UpTo5Years</option>
+                                    <option value="UpTo2Years">UpTo2Years</option>
+                                    <option value="UpTo3Years">UpTo3Years</option>
+                                    <option value="Retiree">Retiree</option>
+                                    <option value="UpTo4Years">UpTo4Years</option>
+                                    <option value="Other">Other</option>
+                                    <option value="TrialPeriod">TrialPeriod</option>
+                                </select>                             
+                            </div>
+                            <div class="col-md-6">
+                                <label for="OccupationArea">OccupationArea</label>
+                                <select class="form-control" id="OccupationArea" name="OccupationArea">
+                                    <option value="Not_specified">Not_specified</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Agriculture, forestry and fishing">Agriculture, forestry and fishing</option>
+                                    <option value="Art and entertainment">Art and entertainment</option>
+                                    <option value="Civil service & military">Civil service & military</option>
+                                    <option value="Construction">Construction</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Energy">Energy</option>
+                                    <option value="Finance and insurance">Finance and insurance</option>
+                                    <option value="Healthcare and social help">Healthcare and social help</option>
+                                    <option value="Hospitality and catering">Hospitality and catering</option>
+                                    <option value="Info and telecom">Info and telecom</option>
+                                    <option value="Mining">Mining</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Research">Research</option>
+                                    <option value="Retail and wholesale">Retail and wholesale</option>
+                                    <option value="Transport and warehousing">Transport and warehousing</option>
+                                    <option value="Utilities">Utilities</option>
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="HomeOwnershipType">HomeOwnershipType</label>
+                                <select class="form-control" id="HomeOwnershipType" name="HomeOwnershipType">
+                                    <option value="Homeless">Homeless</option>
+                                    <option value="Joint ownership">Joint ownership</option>
+                                    <option value="Joint tenant">Joint tenant</option>
+                                    <option value="Living with parents">Living with parents</option>
+                                    <option value="Mortgage">Mortgage</option>
+                                    <option value="Not_specified">Not_specified</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Owner">Owner</option>
+                                    <option value="Owner with encumbrance">Owner with encumbrance</option>
+                                    <option value="Tenant, pre-furnished property">Tenant, pre-furnished property</option>
+                                    <option value="Tenant, unfurnished property">Tenant, unfurnished property</option>
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="IncomeTotal">IncomeTotal</label>
+                                <input type="text" class="form-control" id="IncomeTotal" name="IncomeTotal" placeholder="IncomeTotal">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ExistingLiabilities">ExistingLiabilities</label>
+                                <input type="text" class="form-control" id="ExistingLiabilities" name="ExistingLiabilities" placeholder="ExistingLiabilities">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="RefinanceLiabilities">LiabilitiesTotal</label>
+                                <input type="text" class="form-control" id="LiabilitiesTotal" name="LiabilitiesTotal" placeholder="LiabilitiesTotal">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="DebtToIncome">DebtToIncome</label>
+                                <input type="text" class="form-control" id="DebtToIncome" name="DebtToIncome" placeholder="DebtToIncome">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="FreeCash">FreeCash</label>
+                                <input type="text" class="form-control" id="FreeCash" name="FreeCash" placeholder="FreeCash">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Rating">Rating</label>
+                                <select class="form-control" id="Rating" name="Rating">
+                                    <option value="AA">AA</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="HR">HR</option>
+                                    <option value="Not_specified">Not_specified</option>
+                                    
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Restructured">Restructured</label>
+                                <select class="form-control" id="Restructured" name="Restructured">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="CreditScoreEsMicroL">CreditScoreEsMicroL</label>
+                                <select class="form-control" id="CreditScoreEsMicroL" name="CreditScoreEsMicroL">
+                                    <option value="M1">M1</option>
+                                    <option value="M10">M10</option>
+                                    <option value="M2">M2</option>
+                                    <option value="M3">M3</option>
+                                    <option value="M4">M4</option>
+                                    <option value="M5">M5</option>
+                                    <option value="M6">M6</option>
+                                    <option value="M7">M7</option>
+                                    <option value="M8">M8</option>
+                                    <option value="M9">M9</option>
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PrincipalPaymentsMade">PrincipalPaymentsMade</label>
+                                <input type="text" class="form-control" id="PrincipalPaymentsMade" name="PrincipalPaymentsMade" placeholder="PrincipalPaymentsMade">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="InterestAndPenaltyPaymentsMade">InterestAndPenaltyPaymentsMade</label>
+                                <input type="text" class="form-control" id="InterestAndPenaltyPaymentsMade" name="InterestAndPenaltyPaymentsMade" placeholder="InterestAndPenaltyPaymentsMade">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="InterestAndPenaltyBalance">InterestAndPenaltyBalance</label>
+                                <input type="text" class="form-control" id="InterestAndPenaltyBalance" name="InterestAndPenaltyBalance" placeholder="InterestAndPenaltyBalance">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PrincipalBalance">PrincipalBalance</label>
+                                <input type="text" class="form-control" id="PrincipalBalance" name="PrincipalBalance" placeholder="PrincipalBalance">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="PreviousRepaymentsBeforeLoan">PreviousRepaymentsBeforeLoan</label>
+                                <input type="text" class="form-control" id="PreviousRepaymentsBeforeLoan" name="PreviousRepaymentsBeforeLoan" placeholder="PreviousRepaymentsBeforeLoan">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <!--
+        TODO: add check functions for the fields to match the requirements
+    -->
+</html>
