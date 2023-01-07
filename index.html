@@ -613,7 +613,7 @@
 </table>
 <h2 id="data-pre-processing">Data Pre-processing</h2>
 <p>The data is pre-processed by removing the variables that are not relevant to the analysis, and by dealing with missing values. for the missing values, the variables with more than 40% missing values are removed, and the rest are imputed by the mean or mode value of the variable.</p>
-<p><img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\missing_values.png" alt="Missing Values"></p>
+<p><img src="images/missing_values.webp" alt="Missing Values"></p>
 <p>Then for categorical variables, we removed the irrelevant values that could happen during the data collection process, and then try to prepare the data to be used in the analysis with higher integrity and correctness.</p>
 <p>In addition, the Default Status variable was defined in this process where we created a column for the default status of each loan application. The default status is defined as 1 if the loan is defaulted, and 0 if the loan is not defaulted.</p>
 <p>The shape of the dataset after pre-processing is <strong>(77394, 42)</strong> including the target variable which is Default Status.</p>
@@ -627,8 +627,8 @@
 <li>The Age Distribution in the dataset is <strong>68% between 25 and 44 years old</strong>.</li>
 <li>check the following plots for more insights about the Age and Gender Distribution in the dataset.</li>
 </ul>
-<p><img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Gender_Default_count.png" alt="Gender_Default">
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Age_Default.png" alt="Age_Default"></p>
+<p><img src="images/Gender_Default_count.webp" alt="Gender_Default">
+<img src="images/Age_Default.webp" alt="Age_Default"></p>
 <h2 id="feature-engineering-and-selection">Feature Engineering and Selection</h2>
 <p>The feature engineering and selection is done to prepare the data for the machine learning model. The feature engineering is done by removing the outliers in the dataset and by applying the method of Mutual Information to select the most relevant features. Then according to the results of EDA we tested some new variables that could be useful for the analysis. and finally we applied the method of Principal Component Analysis (PCA) to reduce the dimensionality of the data.</p>
 <p>The feature engineering and selection is done by using the following methods:</p>
@@ -636,12 +636,12 @@
 <li>Mutual Information (MI) and the result is as follows:</li>
 </ul>
 <p>For Category Variables:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\MI_cat.png" alt="MI"></p>
+<img src="images/MI_cat.webp" alt="MI"></p>
 <p>For Numeric Variables:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\MI_num.png" alt="MI"></p>
+<img src="images/MI_num.webp" alt="MI"></p>
 <ul>
 <li>Principal Component Analysis (PCA) and the explained variance is as follows:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\PCA.png" alt="PCA"></li>
+<img src="images/PCA.webp" alt="PCA"></li>
 </ul>
 <h2 id="machine-learning-model">Machine Learning Model</h2>
 <h3 id="classification-model">Classification Model</h3>
@@ -659,9 +659,9 @@
 <h2 id="pipeline">Pipeline</h2>
 <p>The pipeline is done by using the Pipeline from sklearn. The pipeline is done by using the Standard Scaler, PCA, and the selected model. The pipeline is done for both classification and regression model.</p>
 <p>The pipeline for the classification model is as follows:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\classification.jpg" alt="Model"></p>
+<img src="images/classification.webp" alt="Model"></p>
 <p>The pipeline for the regression model is as follows:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\regression.jpg" alt="Model"></p>
+<img src="images/regression.webp" alt="Model"></p>
 <p>These pipelines are used to predict the Default Status, EMI, ELA, and PROI. They were deployed in the web application using the Flask framework with pickle to save the model.</p>
 <h2 id="deployment">Deployment</h2>
 <p>The deployment is done by using the Flask framework. The web application is deployed in the Heroku platform. The web application is done by using the HTML, CSS, and JavaScript. The web application is done by using the Bootstrap framework. The web application is done by using the Flask framework with pickle to save the model.</p>
@@ -670,10 +670,10 @@
 <li>One page to let the user enter the required data to predict the Default Status, EMI, ELA, and PROI.</li>
 <li>The other page to show the result of the prediction.</li>
 </ul>
-<p>Here is the link to the web application: <a href="https://credit-risk-analysis.herokuapp.com/">https://credit-risk-analysis.herokuapp.com/</a>
+<p>Here is the link to the web application: <a href="https://magnificent-kheer-e9717e.netlify.app/">Deployment Link/</a>
 Here is a screenshot of the web application:
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\Web_app1.jpg" alt="Web">
-<img src="file:///d:\Technocolabs\TheSubmissions\Analysing-Credit-Risk-on-European-Peer-to-Peer-lending-platform-Bondora\web_app2.jpg" alt="Web"></p>
+<img src="images/Web_app1.webp" alt="Web">
+<img src="images/web_app2.webp" alt="Web"></p>
 <h2 id="result-and-conclusion">Result and Conclusion</h2>
 <p>The final result is a web application that predicts the parameters required to calculate the credit score of a given loan application and investors can use this web application to predict the credit score of a loan application before investing in it, this will help investors to make a better decision and to reduce the risk of investing in a loan application that will be defaulted.</p>
 <h2 id="credit">Credit</h2>
